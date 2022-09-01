@@ -1,5 +1,8 @@
 let playerScore = 0;
 let computerScore = 0;
+const botones = document.querySelectorAll('input');
+
+console.log(botones);
 
 const getComputerChoice = () => {
     let randomNumber = Math.floor(Math.random() * 3);
@@ -9,42 +12,48 @@ const getComputerChoice = () => {
 };
 
 const singleRound = (playerSelection, computerSelection) => {
-    if (playerSelection === computerSelection) return 'Empate!';
+    console.clear();
+    console.log(`Jugador: ${playerSelection}  Computadora: ${computerSelection}`);
+    if (playerSelection === computerSelection) {
+        console.log(`Jugador: ${playerScore}  Computadora: ${computerScore}`);
+        return 'Empate!'
+    }
     //Eventos ganadores
     else if (playerSelection === 'Piedra' && computerSelection === 'Tijera' ||
              playerSelection === 'Tijera' && computerSelection === 'Papel' ||
              playerSelection === 'Papel' && computerSelection === 'Piedra') {
+                 playerScore += 1;
+                 if(playerScore === 5) {
+                    desabilitarBotones();
+                    return `Ganaste la partida contra una computadora!`;
+                 }
+                 console.log(`Jugador: ${playerScore}  Computadora: ${computerScore}`);
         return `Ganaste! ${playerSelection} le gana a ${computerSelection}`;
     }
     
     //Eventos perdedores
-    else if (playerSelection === 'Tijera' && computerSelection === 'Piedra') {
-        return 'Perdiste! Tijera pierde contra Piedra';
+    else {
+        if(computerScore === 5) {
+            desabilitarBotones();
+        return `Perdiste la partida contra una computadora!`;
+        }
+        computerScore += 1;
+        console.log(`Jugador: ${playerScore}  Computadora: ${computerScore}`);
+        return `Perdiste! ${playerSelection} pierde contra ${computerSelection}`;
     }
-    else if (playerSelection === 'Papel' && computerSelection === 'Tijera') {
-        return 'Perdiste! Papel pierde contra Tijera';
-    }
-    else if (playerSelection === 'Piedra' && computerSelection === 'Papel') {
-        return 'Perdiste! Piedra pierde contra Papel';
-    }
-    //return [playerSelection, computerSelection];
+
 }
 
-    const game = () => {
-    
-    for(let i = 0; i < 5; i++) {
-        let playerSelection = prompt('Qué elijes?');
-        playerSelection = playerSelection.charAt(0).toUpperCase() + playerSelection.slice(1);
-        const computerSelection = getComputerChoice();
-        console.log(singleRound(playerSelection,computerSelection));
-
-    }
-};
-
-game();
-
-// const playerSelection =  'Piedra';
 
 
+botones.forEach(boton => {
+    boton.addEventListener('click', () => {
+        console.log(singleRound(boton.value, getComputerChoice()));
+    })
+})
 
-
+const desabilitarBotones = () => {
+    botones.forEach(boton => {
+        boton.disabled = true;
+    })
+}
