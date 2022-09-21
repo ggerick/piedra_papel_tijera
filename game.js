@@ -1,8 +1,11 @@
 let playerScore = 0;
 let computerScore = 0;
 const botones = document.querySelectorAll('input');
+const result = document.querySelector('.result');
+const score = document.querySelector('.score');
+const choice = document.querySelector('.choice');
 
-console.log(botones);
+const imagenes = document.querySelectorAll('img');
 
 const getComputerChoice = () => {
     let randomNumber = Math.floor(Math.random() * 3);
@@ -12,12 +15,12 @@ const getComputerChoice = () => {
 };
 
 const singleRound = (playerSelection, computerSelection) => {
-    console.clear();
-    console.log(`Jugador: ${playerSelection}  Computadora: ${computerSelection}`);
+    choice.textContent = `Jugador: ${playerSelection}  Computadora: ${computerSelection}`;
     if (playerSelection === computerSelection) {
-        console.log(`Jugador: ${playerScore}  Computadora: ${computerScore}`);
-        return 'Empate!'
+        score.textContent = `Jugador: ${playerScore}  Computadora: ${computerScore}`;
+        return 'Empate!';
     }
+    
     //Eventos ganadores
     else if (playerSelection === 'Piedra' && computerSelection === 'Tijera' ||
              playerSelection === 'Tijera' && computerSelection === 'Papel' ||
@@ -27,7 +30,7 @@ const singleRound = (playerSelection, computerSelection) => {
                     desabilitarBotones();
                     return `Ganaste la partida contra una computadora!`;
                  }
-                 console.log(`Jugador: ${playerScore}  Computadora: ${computerScore}`);
+                score.textContent = `Jugador: ${playerScore}  Computadora: ${computerScore}`;
         return `Ganaste! ${playerSelection} le gana a ${computerSelection}`;
     }
     
@@ -38,17 +41,21 @@ const singleRound = (playerSelection, computerSelection) => {
         return `Perdiste la partida contra una computadora!`;
         }
         computerScore += 1;
-        console.log(`Jugador: ${playerScore}  Computadora: ${computerScore}`);
+        score.textContent = `Jugador: ${playerScore}  Computadora: ${computerScore}`;
         return `Perdiste! ${playerSelection} pierde contra ${computerSelection}`;
     }
 
 }
 
-
+imagenes.forEach(imagen => {
+    imagen.addEventListener('click', () => {
+        result.textContent = singleRound(imagen.alt, getComputerChoice());
+        })
+})
 
 botones.forEach(boton => {
     boton.addEventListener('click', () => {
-        console.log(singleRound(boton.value, getComputerChoice()));
+        result.textContent = singleRound(boton.value, getComputerChoice());
     })
 })
 
